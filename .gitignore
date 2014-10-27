@@ -1,0 +1,8 @@
+# WebStorm project
+.idea
+
+# Node modules
+node_modules
+
+# Compiled libraries
+dist

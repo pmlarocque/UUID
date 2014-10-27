@@ -1,0 +1,24 @@
+{
+  "name": "UUID",
+  "version": "0.9.0",
+  "description": "UUIDs (and GUIDs) as first-class citizens",
+  "main": "uuid.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DashThis/UUID.git"
+  },
+  "author": "DashThis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DashThis/UUID/issues"
+  },
+  "homepage": "https://github.com/DashThis/UUID",
+  "devDependencies": {
+    "gulp": "^3.8.9",
+    "gulp-jasmine": "^1.0.1",
+    "gulp-typescript": "^2.2.0"
+  }
+}
