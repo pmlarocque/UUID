@@ -242,4 +242,17 @@ describe("The Uuid", function() {
             expect(guid1.isEqual(guid2)).toBe(true);
         });
     });
+
+    describe("fromBase64 method", function () {
+        beforeEach(function () {
+            Uuid.setVersion(4);
+            Uuid.setFormat("LowerCase");
+        });
+
+        it("parses a guid correctly", function () {
+            var guid1 = Uuid.fromBase64("qkOjnCB2V0mRu9WTlq3oFg==", true);
+            var guid2 = Uuid.parse("9ca343aa-7620-4957-91bb-d59396ade816");
+            expect(guid1.toString()).toBe(guid2.toString());
+        });
+    });
 });

@@ -1,5 +1,5 @@
 export = Uuid;
-declare var require; // For NodeJS
+declare var require, global; // For NodeJS
 
 var hexToByte = {};
 var byteToHex = [];
@@ -12,20 +12,20 @@ for (var i = 0; i < 256; i++) {
 var randomGenerator: () => number[];
 
 // Establish the root object, `window` in the browser, or `global` on the server.
-var root = this;
+var root = typeof global === 'undefined' ? window : global;
 
-if (this.crypto && this.crypto.getRandomValues) { // Webkit, eventually FireFox and IE
+if (root.crypto && root.crypto.getRandomValues) { // Webkit, eventually FireFox and IE
     console.log("Using Web Crypto");
     randomGenerator = () => {
         var rnd = new Uint8Array(16);
-        this.crypto.getRandomValues(rnd);
+        root.crypto.getRandomValues(rnd);
         return Array.prototype.slice.call(rnd, 0);
     };
-} else if (this.msCrypto && this.msCrypto.getRandomValues) { // IE11
+} else if (root.msCrypto && root.msCrypto.getRandomValues) { // IE11
     console.log("Using IE11 Web Crypto");
     randomGenerator = () => {
         var rnd = new Uint8Array(16);
-        window.msCrypto.getRandomValues(rnd);
+        root.msCrypto.getRandomValues(rnd);
         return Array.prototype.slice.call(rnd, 0);
     };
 } else {
@@ -180,7 +180,60 @@ class Uuid {
         }
     };
 
-    public static fromBase64 = (str: string, windowsMode: boolean = false) => {
+    private static decodeB64 = (char: string) : number => {
+        var PLUS = '+'.charCodeAt(0);
+        var SLASH = '/'.charCodeAt(0);
+        var NUMBER = '0'.charCodeAt(0);
+        var LOWER = 'a'.charCodeAt(0);
+        var UPPER = 'A'.charCodeAt(0);
 
+        var code = char.charCodeAt(0)
+        if (code === PLUS)
+            return 62 // '+'
+        if (code === SLASH)
+            return 63 // '/'
+        if (code < NUMBER)
+            return -1 //no match
+        if (code < NUMBER + 10)
+            return code - NUMBER + 26 + 26
+        if (code < UPPER + 26)
+            return code - UPPER
+        if (code < LOWER + 26)
+            return code - LOWER + 26
+    };
+
+    public static fromBase64 = (b64: string, windowsMode: boolean = false): Uuid => {
+        if (b64.length !== 24) {
+            throw new Error('Invalid string. Length must be a multiple of 24');
+        }
+
+        // base64 is 4/3 + up to two characters of the original data
+        var bytes:number[] = [];
+
+        var tmp;
+
+        for (i = 0; i < 20; i += 4) {
+            tmp = (Uuid.decodeB64(b64.charAt(i)) << 18) | (Uuid.decodeB64(b64.charAt(i + 1)) << 12) | (Uuid.decodeB64(b64.charAt(i + 2)) << 6) | Uuid.decodeB64(b64.charAt(i + 3))
+            bytes.push((tmp & 0xFF0000) >> 16)
+            bytes.push((tmp & 0xFF00) >> 8)
+            bytes.push(tmp & 0xFF)
+        }
+
+        tmp = (Uuid.decodeB64(b64.charAt(i)) << 2) | (Uuid.decodeB64(b64.charAt(i + 1)) >> 4)
+        bytes.push(tmp & 0xFF)
+
+        if (windowsMode) {
+            bytes = [
+                bytes[3],
+                bytes[2],
+                bytes[1],
+                bytes[0],
+                bytes[5],
+                bytes[4],
+                bytes[7],
+                bytes[6]
+            ].concat(bytes.slice(8));
+        }
+        return new Uuid(bytes);
     };
 }
