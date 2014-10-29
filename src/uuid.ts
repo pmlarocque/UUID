@@ -54,7 +54,7 @@ if (root.crypto && root.crypto.getRandomValues) { // Webkit, eventually FireFox 
 
 }
 
-class Uuid {
+class Uuid implements UuidInstance {
     private static _version: number = 4;
     private static _format: string = "UpperCase";
     private static validator: RegExp = /^\{?[a-f0-9]{8}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{12}}?$/i;

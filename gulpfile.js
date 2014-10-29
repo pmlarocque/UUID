@@ -28,9 +28,8 @@ gulp.task("build", ["clean"], function() {
 
     return eventStream.merge(
         amdStream.js.pipe(gulp.dest("dist/AMD")),
-        amdStream.dts.pipe(gulp.dest("dist/AMD")),
         commonJSStream.js.pipe(gulp.dest("dist/CommonJS")),
-        commonJSStream.dts.pipe(gulp.dest("dist/CommonJS")));
+        gulp.src("src/**/*.d.ts").pipe(gulp.dest("dist/defs")));
 });
 
 gulp.task("test", ["build"], function () {
