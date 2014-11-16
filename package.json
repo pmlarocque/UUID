@@ -1,10 +1,10 @@
 {
-  "name": "UUID",
-  "version": "0.9.0",
+  "name": "uuid",
+  "version": "0.9.2",
   "description": "UUIDs (and GUIDs) as first-class citizens",
-  "main": "uuid.js",
+  "main": "dist/CommonJS/uuid.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublish": "gulp build"
   },
   "repository": {
     "type": "git",
