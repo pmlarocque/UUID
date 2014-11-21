@@ -1,4 +1,4 @@
-var Uuid = require("../dist/CommonJS/uuid");
+var Uuid = require("../dist/CommonJS/dashthis-uuid");
 
 describe("The Uuid", function() {
     describe("isUuid method", function () {

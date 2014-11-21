@@ -12,17 +12,15 @@ for (var i = 0; i < 256; i++) {
 var randomGenerator: () => number[];
 
 // Establish the root object, `window` in the browser, or `global` on the server.
-var root = typeof global === 'undefined' ? window : global;
+var root: any = typeof global === 'undefined' ? window : global;
 
 if (root.crypto && root.crypto.getRandomValues) { // Webkit, eventually FireFox and IE
-    console.log("Using Web Crypto");
     randomGenerator = () => {
         var rnd = new Uint8Array(16);
         root.crypto.getRandomValues(rnd);
         return Array.prototype.slice.call(rnd, 0);
     };
 } else if (root.msCrypto && root.msCrypto.getRandomValues) { // IE11
-    console.log("Using IE11 Web Crypto");
     randomGenerator = () => {
         var rnd = new Uint8Array(16);
         root.msCrypto.getRandomValues(rnd);
@@ -32,13 +30,11 @@ if (root.crypto && root.crypto.getRandomValues) { // Webkit, eventually FireFox 
     // Try Node
     try {
         var randomBytes = require("crypto").randomBytes;
-        console.log("Using NodeJS Crypto");
         randomGenerator = () => {
             var rnd = randomBytes(16);
             return Array.prototype.slice.call(rnd, 0); // ref: https://groups.google.com/forum/#!topic/nodejs/5AFLWNDg578
         };
     } catch(e)  {
-        console.log("Using fallback random");
         randomGenerator = () => {
             // Fallback to default method, might be non-cryptographic
             var rnd = [];
@@ -51,7 +47,6 @@ if (root.crypto && root.crypto.getRandomValues) { // Webkit, eventually FireFox 
             return rnd;
         };
     }
-
 }
 
 class Uuid implements UuidInstance {

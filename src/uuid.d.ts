@@ -20,7 +20,7 @@ interface UuidInstance {
     isEqual: (other: UuidInstance) => boolean
 }
 
-declare module "uuid" {
+declare module "dashthis-uuid" {
     var uuid: UuidStatic;
     export = uuid;
 }
