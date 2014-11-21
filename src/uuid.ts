@@ -87,7 +87,7 @@ class Uuid implements UuidInstance {
         this._bytes = bytes;
     }
 
-    public toString = () : string => {
+    public toString() : string {
         var str = byteToHex[this._bytes[0]] + byteToHex[this._bytes[1]] +
             byteToHex[this._bytes[2]] + byteToHex[this._bytes[3]] + '-' +
             byteToHex[this._bytes[4]] + byteToHex[this._bytes[5]] + '-' +
@@ -110,13 +110,13 @@ class Uuid implements UuidInstance {
             default:
                 throw new Error("Unsupported format");
         }
-    };
+    }
 
-    public toJSON = () : string => {
+    public toJSON() : string {
         return this.toString();
     }
 
-    public isEqual = (other: Uuid): boolean => {
+    public isEqual (other: Uuid): boolean {
         if (!other || !this._bytes || !other._bytes || this._bytes.length !== other._bytes.length) {
             return false;
         } else {
@@ -129,9 +129,9 @@ class Uuid implements UuidInstance {
 
             return true;
         }
-    };
+    }
 
-    public static parse = (value: string) : Uuid => {
+    public static parse (value: string) : Uuid {
         if (!Uuid.isUuid(value)) {
             throw new Error("Invalid Uuid");
         } else {
@@ -145,37 +145,37 @@ class Uuid implements UuidInstance {
 
             return new Uuid(buffer);
         }
-    };
+    }
 
-    public static isUuid = (value: string): boolean => {
+    public static isUuid (value: string): boolean {
         return Uuid.validator.test(value);
-    };
+    }
 
-    public static areEqual = (guid1: Uuid, guid2: Uuid): boolean => {
+    public static areEqual (guid1: Uuid, guid2: Uuid): boolean {
         if (!guid1 || !guid2 || !guid1.isEqual) {
             return false;
         } else {
             return guid1.isEqual(guid2);
         }
-    };
+    }
 
-    public static setVersion = (version: number): void => {
+    public static setVersion (version: number): void {
         if (version !== 4) {
             throw new Error("Version not supported. Currently supported versions are: 4");
         } else {
             Uuid._version = version;
         }
-    };
+    }
 
-    public static setFormat = (format: string): void => {
+    public static setFormat (format: string): void {
         if (format !== "UpperCase" && format !== "LowerCase" && format !== "Braces") {
             throw new Error("Invalid format: must be 'LowerCase', 'UpperCase' or 'Braces'");
         } else {
             Uuid._format = format;
         }
-    };
+    }
 
-    private static decodeB64 = (char: string) : number => {
+    private static decodeB64 (char: string): number {
         var PLUS = '+'.charCodeAt(0);
         var SLASH = '/'.charCodeAt(0);
         var NUMBER = '0'.charCodeAt(0);
@@ -195,9 +195,9 @@ class Uuid implements UuidInstance {
             return code - UPPER
         if (code < LOWER + 26)
             return code - LOWER + 26
-    };
+    }
 
-    public static fromBase64 = (b64: string, windowsMode: boolean = false): Uuid => {
+    public static fromBase64 (b64: string, windowsMode: boolean = false): Uuid {
         if (b64.length !== 24) {
             throw new Error('Invalid string. Length must be a multiple of 24');
         }
@@ -230,5 +230,5 @@ class Uuid implements UuidInstance {
             ].concat(bytes.slice(8));
         }
         return new Uuid(bytes);
-    };
+    }
 }
